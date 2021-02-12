@@ -25,6 +25,13 @@ jobs:
         uses: actions-ml/setup-ocaml@master
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
+          dune-cache: true
+
+      - run: |
+          rm /Users/runner/.opam/opam-init/hooks/sandbox.sh
+          curl --silent --location --output /Users/runner/.opam/opam-init/hooks/sandbox.sh -C - https://raw.githubusercontent.com/ocaml/opam/master/src/state/shellscripts/sandbox_exec.sh
+          chmod 777 /Users/runner/.opam/opam-init/hooks/sandbox.sh
+        if: matrix.os == 'macos-latest'
 
       - run: opam install . --deps-only --with-doc --with-test
 
